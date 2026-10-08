@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Our Friendship Scrapbook ♡ Happy Birthday Bestie!</title>
+  <meta name="description" content="A handmade digital scrapbook filled with friendship stickers, Polaroids, vintage tickets, and warm birthday memories.">
+  <meta name="theme-color" content="#341c11">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Particle & Confetti Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Speech Toast for Interactive Stickers -->
+  <div class="sticker-speech-toast" id="speech-toast" role="status" aria-live="polite"></div>
+
+  <!-- Audio Element for Soundtrack -->
+  <audio id="bg-audio" src="assets/bg_song.mp4" preload="auto" loop></audio>
+
+  <!-- ==========================================================================
+       GIFT GATE MODAL (Inspired by ref_interactive.jpg)
+       ========================================================================== -->
+  <aside class="gift-gate-overlay" id="gift-gate" aria-modal="true" role="dialog">
+    <div class="gift-gate-card">
+      <div class="gate-mascot-wrapper">
+        <span class="gate-speech-heart">♡</span>
+        <!-- Cute hand-drawn cat/bear icon -->
+        <svg class="gate-mascot" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="48" rx="26" ry="24" fill="#ffffff" stroke="#3b2014" stroke-width="3"/>
+          <path d="M22 34 L18 16 L32 26 Z" fill="#ffffff" stroke="#3b2014" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M58 34 L62 16 L48 26 Z" fill="#ffffff" stroke="#3b2014" stroke-width="3" stroke-linejoin="round"/>
+          <!-- Cheeks -->
+          <circle cx="26" cy="50" r="4.5" fill="#f8b4b4" opacity="0.8"/>
+          <circle cx="54" cy="50" r="4.5" fill="#f8b4b4" opacity="0.8"/>
+          <!-- Happy closed eyes -->
+          <path d="M28 44 Q33 40 36 44" stroke="#3b2014" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M44 44 Q47 40 52 44" stroke="#3b2014" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Cute snout -->
+          <ellipse cx="40" cy="48" rx="2" ry="1.5" fill="#7a182b"/>
+          <path d="M38 52 Q40 55 42 52" stroke="#3b2014" stroke-width="2" fill="none"/>
+          <!-- Waving paw -->
+          <ellipse cx="16" cy="44" rx="5" ry="7" fill="#ffffff" stroke="#3b2014" stroke-width="2.5" transform="rotate(-30 16 44)"/>
+        </svg>
+      </div>
+      
+      <h1 class="gate-title">Hello there <span class="gate-cursor-dot">_!</span></h1>
+      <p class="gate-subtitle">do you want to open your birthday scrapbook?</p>
+
+      <div class="gate-btn-group">
+        <button class="gate-btn gate-btn-yes" id="btn-gate-yes">
+          <span>YES PLEASE</span> ♡
+        </button>
+        <button class="gate-btn gate-btn-no" id="btn-gate-no">
+          <span>NO THANKS</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       SCRAPBOOK HEADER & RIBBON NAVIGATION
+       ========================================================================== -->
+  <header class="scrapbook-header">
+    <nav class="scrapbook-nav-tabs" aria-label="Scrapbook chapters">
+      <div class="nav-links-cluster">
+        <button class="nav-tab-btn active" data-target="chapter-cover">🏷️ Cover</button>
+        <button class="nav-tab-btn" data-target="chapter-memories">📷 Memories</button>
+        <button class="nav-tab-btn" data-target="chapter-keepsakes">🎟️ Keepsakes</button>
+        <button class="nav-tab-btn" data-target="chapter-soundtrack">🎵 Song</button>
+        <button class="nav-tab-btn" data-target="chapter-letter">💌 Letter</button>
+        <button class="nav-tab-btn" data-target="chapter-wish">🎂 Make a Wish</button>
+      </div>
+      <div class="nav-actions-cluster">
+        <button class="nav-action-btn" id="btn-music-toggle" title="Toggle Music" aria-label="Toggle Background Music">
+          🎵
+        </button>
+        <button class="nav-action-btn" id="btn-sfx-toggle" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+          🔔
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN SCRAPBOOK PAGES
+       ========================================================================== -->
+  <main class="scrapbook-container">
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 1: SCRAPBOOK COVER & WELCOME
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-cover">
+      <!-- Decorative Washi Tape -->
+      <div class="washi-tape-strip" style="top: -10px; right: 80px; width: 110px; transform: rotate(3deg);"></div>
+
+      <!-- Corner Lace & Bow Stickers -->
+      <div class="diecut-sticker" id="sticker-top-bow" style="top: 15px; left: 15px; width: 68px;"></div>
+      <div class="diecut-sticker" id="sticker-corner-butterfly" style="top: 20px; right: 25px; width: 55px;"></div>
+
+      <div class="hero-cover-layout">
+        <!-- Cover Lettering -->
+        <div class="cover-lettering">
+          <span class="scrapbook-tag-badge">★ HANDCRAFTED FOR YOU ★</span>
+          <h2 class="scrapbook-title">Happy Birthday To My Favorite Human!</h2>
+          <p class="scrapbook-subtitle">
+            A little scrapbook of laughter, frozen moments, warm hugs, and all the reasons you mean the entire world to me. ♡
+          </p>
+
+          <div class="scrapbook-divider">
+            <span class="divider-line"></span>
+            <span class="divider-heart">♡</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Torn Note Sticker -->
+          <div id="sticker-note-hero" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Cover Polaroid Stage -->
+        <div class="cover-polaroid-stage">
+          <!-- Stick Friends Sticker hovering over polaroid -->
+          <div class="diecut-sticker" id="sticker-stick-friends-hero" style="top: -30px; left: -20px; width: 90px; transform: rotate(-8deg);"></div>
+
+          <div class="polaroid-stack-main">
+            <!-- Washi tape pinning the polaroid -->
+            <div class="washi-tape-strip" style="top: -10px; left: 25%; width: 90px; transform: rotate(-1deg);"></div>
+            
+            <div class="polaroid-card" id="hero-polaroid" data-src="assets/photo_portrait.jpg" data-caption="The smile that brightens any room! 🎀">
+              <div class="polaroid-img-frame">
+                <img src="assets/photo_portrait.jpg" alt="Best friend smiling portrait with bow" loading="lazy">
+              </div>
+              <div class="polaroid-caption">My Sunshine Girl ✨</div>
+              <span class="polaroid-date-stamp">FOREVER & ALWAYS</span>
+            </div>
+
+            <!-- Teddy Bear Sticker sitting beside the photo (Interactive!) -->
+            <div class="diecut-sticker interactive" id="sticker-teddy-hero" style="bottom: -25px; right: -25px; width: 75px; transform: rotate(8deg);" title="Tap me for a birthday hug!"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 2: PHOTO MEMORIES (POLAROID SCRAPBOOK GALLERY)
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-memories">
+      <div class="washi-tape-strip" style="top: -10px; left: 100px; width: 100px; transform: rotate(-2deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">MEMORIES • SNAPSHOTS</span>
+        <h2 class="scrapbook-title">Our Little Frozen Moments</h2>
+        <p class="scrapbook-subtitle">Every photograph holds a whole world of laughter and comfort.</p>
+      </div>
+
+      <div class="memories-polaroid-grid">
+
+        <!-- Polaroid 1: Mirror Selfie -->
+        <article class="polaroid-card" data-src="assets/photo_mirror.jpg" data-caption="Always camera ready & matching each other's vibe! 🤳">
+          <div class="washi-tape-strip" style="top: -8px; left: 30%; width: 75px; transform: rotate(1deg);"></div>
+          <!-- Band-aid sticker on photo corner -->
+          <div class="diecut-sticker" id="sticker-bandaid-p1" style="top: 10px; right: -15px; width: 90px; transform: rotate(15deg);"></div>
+          
+          <div class="polaroid-img-frame">
+            <img src="assets/photo_mirror.jpg" alt="Mirror selfie of best friend in kurti" loading="lazy">
+          </div>
+          <div class="polaroid-caption">Matching energies & pure confidence ✨</div>
+          <span class="polaroid-date-stamp">#UNBREAKABLE</span>
+        </article>
+
+        <!-- Polaroid 2: Smiling with Bow -->
+        <article class="polaroid-card" data-src="assets/photo_portrait.jpg" data-caption="Soft moments and the sweetest soul. 🎀">
+          <div class="washi-tape-strip" style="top: -8px; left: 20%; width: 80px; transform: rotate(-3deg);"></div>
+          <!-- Burgundy butterfly interactive sticker -->
+          <div class="diecut-sticker interactive" id="sticker-butterfly-p2" style="bottom: 45px; left: -22px; width: 55px; transform: rotate(-10deg);" title="Tap to fly!"></div>
+          
+          <div class="polaroid-img-frame">
+            <img src="assets/photo_portrait.jpg" alt="Portrait with floral dress and bow filter" loading="lazy">
+          </div>
+          <div class="polaroid-caption">Prettiest smile in the whole universe 🎀</div>
+          <span class="polaroid-date-stamp">#MYGIRL</span>
+        </article>
+
+        <!-- Polaroid 3: Laughing in nature holding hands -->
+        <article class="polaroid-card" data-src="assets/photo_friends_outdoor.jpg" data-caption="Two partners in crime! Laughing till our stomachs hurt. 🌿👯‍♀️">
+          <div class="washi-tape-strip" style="top: -8px; right: 25%; width: 85px; transform: rotate(2deg);"></div>
+          <!-- Memories ticket pinned to photo corner -->
+          <div class="diecut-sticker" id="sticker-memories-p3" style="top: -15px; left: -15px; width: 110px; transform: rotate(-8deg);"></div>
+
+          <div class="polaroid-img-frame">
+            <img src="assets/photo_friends_outdoor.jpg" alt="Both best friends holding hands outdoors laughing" loading="lazy">
+          </div>
+          <div class="polaroid-caption">Laughing until our stomachs hurt! 🌿👯‍♀️</div>
+          <span class="polaroid-date-stamp">#FOREVERUS</span>
+        </article>
+
+        <!-- Polaroid 4: Sweet Hug Indoor Selfie -->
+        <article class="polaroid-card" data-src="assets/photo_friends_hug.jpg" data-caption="My safe space, my go-to person through everything. 🫂🎓">
+          <div class="washi-tape-strip" style="top: -8px; left: 35%; width: 70px; transform: rotate(-1deg);"></div>
+          <!-- "my girl" heart sticker (Interactive!) -->
+          <div class="diecut-sticker interactive" id="sticker-mygirl-p4" style="bottom: 30px; right: -20px; width: 68px; transform: rotate(12deg);" title="Tap me!"></div>
+
+          <div class="polaroid-img-frame">
+            <img src="assets/photo_friends_hug.jpg" alt="Two friends taking sweet selfie together indoors" loading="lazy">
+          </div>
+          <div class="polaroid-caption">My person, my safe harbor 🫂🎓</div>
+          <span class="polaroid-date-stamp">#BESTIES</span>
+        </article>
+
+        <!-- Polaroid 5: Nature smile with flower branch -->
+        <article class="polaroid-card" data-src="assets/photo_nature_smile.jpg" data-caption="Soft breeze, sweet soul. So proud of who you are. 🌸">
+          <div class="washi-tape-strip" style="top: -8px; right: 20%; width: 80px; transform: rotate(3deg);"></div>
+          <!-- Flower branch sticker beside photo -->
+          <div class="diecut-sticker" id="sticker-flower-p5" style="top: -10px; right: -15px; width: 65px; transform: rotate(15deg);"></div>
+
+          <div class="polaroid-img-frame">
+            <img src="assets/photo_nature_smile.jpg" alt="Portrait holding wild flower branch with doodle hearts" loading="lazy">
+          </div>
+          <div class="polaroid-caption">Soft breeze, sweet soul 🌸</div>
+          <span class="polaroid-date-stamp">#BLESSED</span>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 3: VINTAGE KEEPSAKE TICKETS & BADGES
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-keepsakes">
+      <div class="washi-tape-strip" style="top: -10px; right: 120px; width: 90px; transform: rotate(2deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">INTERACTIVE KEEPSAKES</span>
+        <h2 class="scrapbook-title">The Ticket & Keepsake Pocket</h2>
+        <p class="scrapbook-subtitle">Tap each ticket and badge to discover its hidden surprise. ♡</p>
+      </div>
+
+      <div class="tickets-collector-pocket">
+        <!-- Floating Red Bow in Pocket -->
+        <div class="diecut-sticker" id="sticker-pocket-bow" style="top: -20px; left: 15px; width: 65px; transform: rotate(-6deg);"></div>
+
+        <div class="tickets-flex-row">
+          <!-- 1. Ticket To Happiness (3D Flip Ticket) -->
+          <div id="holder-ticket-happiness"></div>
+
+          <!-- 2. Ticket To Anywhere (Tap for message) -->
+          <div id="holder-ticket-anywhere"></div>
+
+          <!-- 3. Memories Ticket (Tap to view memories) -->
+          <div id="holder-ticket-memories"></div>
+
+          <!-- 4. Interactive Envelope Sticker (Opens to reveal note) -->
+          <div id="holder-interactive-envelope"></div>
+
+          <!-- 5. "You're perfect." Oval Badge -->
+          <div id="holder-badge-perfect"></div>
+
+          <!-- 6. Puffy 3D Glossy Heart (Tap to burst hearts!) -->
+          <div id="holder-puffy-heart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 4: SOUNDTRACK PLAYER (SPOTIFY AESTHETIC)
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-soundtrack">
+      <div class="washi-tape-strip" style="top: -10px; left: 45%; width: 100px; transform: rotate(-1deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">OUR SOUNDTRACK • SPOTIFY VIBES</span>
+        <h2 class="scrapbook-title">Melodies of Us</h2>
+        <p class="scrapbook-subtitle">The songs that remind me of long drives, endless laughter, and shared secrets.</p>
+      </div>
+
+      <div class="soundtrack-card" id="soundtrack-card">
+        <!-- Spotify Icon Sticker -->
+        <div class="diecut-sticker interactive" id="sticker-spotify-disc" style="top: -15px; right: 20px; width: 50px; transform: rotate(8deg);" title="Tap to toggle music!"></div>
+
+        <!-- Album Art -->
+        <div class="album-art-diecut">
+          <img src="assets/photo_friends_outdoor.jpg" alt="Friends laughing album cover" loading="lazy">
+          <div class="album-play-overlay-btn" id="album-play-btn" role="button" aria-label="Play Track">
+            ▶
+          </div>
+        </div>
+
+        <!-- Track Info & Controls -->
+        <div class="track-info-cluster">
+          <span class="track-badge">★ BEST FRIEND ANTHEM ★</span>
+          <h3 class="track-title">Golden Hour Memories</h3>
+          <p class="track-artist">Teju & Bestie ♡ Always & Forever</p>
+
+          <!-- Animated Waveform Equalizer -->
+          <div class="waveform-container" aria-hidden="true">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </div>
+
+          <!-- Audio Waveform Sticker -->
+          <div id="holder-waveform-sticker"></div>
+
+          <!-- Player Controls -->
+          <div class="audio-controls-row">
+            <button class="btn-play-pause" id="btn-track-play" aria-label="Play/Pause Audio">
+              ▶
+            </button>
+            <div class="volume-slider-box">
+              <span>🔊</span>
+              <input type="range" id="audio-volume" min="0" max="1" step="0.05" value="0.7" aria-label="Audio Volume">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 5: SCALLOPED LOVE/FRIENDSHIP LETTER (From ref_loveletter.jpg)
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-letter">
+      <div class="washi-tape-strip" style="top: -10px; right: 30%; width: 90px; transform: rotate(2deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">VINTAGE CORRESPONDENCE</span>
+        <h2 class="scrapbook-title">A Letter For You</h2>
+        <p class="scrapbook-subtitle">A heartfelt letter written from the bottom of my heart. ♡</p>
+      </div>
+
+      <div class="letter-stage-wrapper">
+        <div class="envelope-interactive-box">
+          
+          <!-- Scalloped Postage Letter Sheet -->
+          <div class="scalloped-letter-sheet" id="scalloped-letter-sheet">
+            <h3 class="letter-heading-scalloped">A FRIENDSHIP LETTER</h3>
+
+            <div class="letter-meta-row">
+              <div class="meta-field">TO: <span>My Best Friend</span></div>
+              <div class="stamps-corner-cluster">
+                <div class="scallop-photo-stamp" title="You & Me">
+                  <img src="assets/photo_friends_hug.jpg" alt="Stamp photo 1" loading="lazy">
+                </div>
+                <div class="scallop-photo-stamp" style="transform: rotate(-4deg);" title="Our smiles">
+                  <img src="assets/photo_mirror.jpg" alt="Stamp photo 2" loading="lazy">
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-field" style="margin-bottom: 20px;">FROM: <span>Teju</span></div>
+
+            <div class="letter-salutation">My Dearest Friend,</div>
+
+            <div class="letter-body-paragraphs">
+              <p>
+                Ever since you came into my life, everything has felt lighter, brighter, and so much more meaningful.
+              </p>
+              <br>
+              <p>
+                Your smile brings genuine peace, your laughter can turn my worst days completely upside down, and your presence makes every little moment feel like home. You are the one who understands my quiet moods without demanding words, and the one who laughs with me until tears roll down our faces.
+              </p>
+              <br>
+              <p>
+                Thank you for being my constant rock, my partner in every crazy idea, and the sweetest sister my heart could have ever chosen. No matter where life takes us, I carry you with me everywhere.
+              </p>
+            </div>
+
+            <div class="letter-signature-row">
+              <div class="letter-signature">— forever your bestie, Teju ♡</div>
+              <!-- Made with Love Stamp -->
+              <div class="made-with-love-stamp">
+                <span class="stamp-curve-text">MADE WITH</span>
+                <span class="stamp-heart-icon">♡</span>
+                <span class="stamp-curve-text">FRIENDSHIP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wax Seal Button (Tap to toggle letter focus/reveal) -->
+          <button class="wax-seal-button" id="btn-wax-seal" title="Wax Seal - Click to toggle letter!" aria-label="Wax Seal Button">
+            ♡
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 6: REASONS WHY YOU MEAN THE WORLD TO ME (FOLD-OUT NOTES)
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-reasons">
+      <div class="washi-tape-strip" style="top: -10px; left: 20%; width: 110px; transform: rotate(-3deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">LITTLE TRUTHS</span>
+        <h2 class="scrapbook-title">Why You Mean The World To Me</h2>
+        <p class="scrapbook-subtitle">Just a few of the million reasons you are one in a billion. ✨</p>
+      </div>
+
+      <div class="reasons-cards-grid">
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 30%; width: 60px;"></div>
+          <div class="reason-num">REASON #01</div>
+          <p class="reason-text">You never judge my weirdness—you just join right in with full enthusiasm!</p>
+        </div>
+
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 35%; width: 65px;"></div>
+          <div class="reason-num">REASON #02</div>
+          <p class="reason-text">You can read my mind from across the room with just one single look.</p>
+        </div>
+
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 25%; width: 70px;"></div>
+          <div class="reason-num">REASON #03</div>
+          <p class="reason-text">Our comfortable silences are just as precious as our three-hour phone calls.</p>
+        </div>
+
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 40%; width: 60px;"></div>
+          <div class="reason-num">REASON #04</div>
+          <p class="reason-text">You believe in my dreams even on days when I struggle to believe in myself.</p>
+        </div>
+
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 30%; width: 65px;"></div>
+          <div class="reason-num">REASON #05</div>
+          <p class="reason-text">Your hugs have this rare superpower of making all heavy things feel light.</p>
+        </div>
+
+        <div class="sticky-reason-card">
+          <div class="washi-tape-strip" style="top: -6px; left: 20%; width: 70px;"></div>
+          <div class="reason-num">REASON #06</div>
+          <p class="reason-text">You're not just my best friend, you are chosen family for life. ♡</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         CHAPTER 7: BIRTHDAY WISH & CAKE CEREMONY
+         ---------------------------------------------------------------------- -->
+    <section class="scrapbook-page" id="chapter-wish">
+      <div class="washi-tape-strip" style="top: -10px; right: 20%; width: 100px; transform: rotate(1deg);"></div>
+
+      <div class="scrapbook-section-header">
+        <span class="scrapbook-tag-badge">MAKE A WISH</span>
+        <h2 class="scrapbook-title">A Special Birthday Wish</h2>
+        <p class="scrapbook-subtitle">Close your eyes, make the sweetest wish in your heart, and tap the candle! 🕯️</p>
+      </div>
+
+      <div class="cake-ceremony-wrapper">
+        <!-- Birthday Cupcake Illustration -->
+        <div class="cupcake-illustration-box" id="candle-trigger" role="button" tabindex="0" aria-label="Tap the candle to blow it out!">
+          <div class="candle-flame" id="candle-flame"></div>
+          <div class="candle-smoke"></div>
+          <div class="candle-stick"></div>
+          <div class="cake-frosting"></div>
+          <div class="cake-base"></div>
+        </div>
+
+        <p class="wish-instructions" id="wish-hint">Tap the flame to blow out your birthday candle! ✨</p>
+        <div class="wish-celebration-banner" id="celebration-banner">
+          🎉 HAPPY BIRTHDAY BESTIE! MAY ALL YOUR WISHES COME TRUE! 🎂✨
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       PHOTO LIGHTBOX MODAL
+       ========================================================================== -->
+  <aside class="scrapbook-lightbox" id="photo-lightbox" aria-hidden="true" role="dialog">
+    <div class="lightbox-content-box">
+      <button class="lightbox-close-btn" id="lightbox-close" aria-label="Close Lightbox">✕</button>
+      <div class="lightbox-polaroid">
+        <img src="" id="lightbox-img" alt="Enlarged scrapbook photo">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       INTERACTIVE STICKER DRAWER / TOOLBOX (BONUS SCRAPBOOK DECORATOR)
+       ========================================================================== -->
+  <button class="sticker-drawer-toggle" id="btn-open-drawer" aria-label="Open Sticker Box">
+    <span>🎨</span> Sticker Box
+  </button>
+
+  <aside class="sticker-drawer-panel" id="sticker-drawer">
+    <div class="drawer-header-row">
+      <h4 class="drawer-title">Decorate Your Scrapbook! Tap a sticker to place it ♡</h4>
+      <button class="drawer-close-btn" id="btn-close-drawer" aria-label="Close Drawer">✕</button>
+    </div>
+    <div class="sticker-tray-grid">
+      <div class="tray-sticker-item" data-type="teddy" title="Teddy Bear"></div>
+      <div class="tray-sticker-item" data-type="stickFriends" title="Stick Friends"></div>
+      <div class="tray-sticker-item" data-type="bowRed" title="Red Bow"></div>
+      <div class="tray-sticker-item" data-type="bowCream" title="Cream Bow"></div>
+      <div class="tray-sticker-item" data-type="butterfly" title="Lace Butterfly"></div>
+      <div class="tray-sticker-item" data-type="puffyHeart" title="Puffy Heart"></div>
+      <div class="tray-sticker-item" data-type="flowerBranch" title="Flower Branch"></div>
+      <div class="tray-sticker-item" data-type="bandaid" title="Heart Band-aid"></div>
+      <div class="tray-sticker-item" data-type="spotifyHeart" title="Music Badge"></div>
+    </div>
+  </aside>
+
+  <!-- SCRIPTS -->
+  <script src="stickers.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

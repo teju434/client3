@@ -1,0 +1,2177 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Quicksand:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   FRIENDSHIP SCRAPBOOK STYLESHEET
+   Aesthetic: Handmade Vintage Scrapbook with Die-Cut Stickers & Polaroids
+   Colors: Cream Paper, Dark Chocolate Brown, Burgundy / Wine Red, Beige, Dusty Pink
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --color-chocolate: #341c11;
+  --color-chocolate-dark: #22120a;
+  --color-chocolate-light: #52301f;
+  --color-burgundy: #7a182b;
+  --color-burgundy-dark: #5c0f1e;
+  --color-burgundy-light: #9e263d;
+  --color-cream: #faf5ec;
+  --color-cream-card: #fffdf9;
+  --color-parchment: #f3ebd9;
+  --color-beige: #e5d6c5;
+  --color-beige-dark: #cbb7a1;
+  --color-dusty-pink: #dfa8a0;
+  --color-dusty-pink-soft: #f1dbd8;
+  --color-dusty-pink-dark: #b87970;
+  --color-heart-red: #c92a3f;
+  --color-white: #ffffff;
+  
+  /* Typography */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-handwriting: 'Caveat', cursive;
+  --font-casual: 'Patrick Hand', 'Caveat', cursive;
+  --font-mono: 'Courier Prime', Courier, monospace;
+  --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Shadows & Filters */
+  --shadow-paper: 0 4px 18px rgba(35, 18, 10, 0.08), 0 1px 3px rgba(35, 18, 10, 0.05);
+  --shadow-polaroid: 0 10px 28px rgba(35, 18, 10, 0.15), 0 2px 6px rgba(35, 18, 10, 0.08);
+  --shadow-sticker: drop-shadow(0 4px 6px rgba(45, 20, 10, 0.2));
+  --shadow-sticker-hover: drop-shadow(0 6px 10px rgba(45, 20, 10, 0.28));
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Base & Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-chocolate-dark);
+  background-image: 
+    radial-gradient(circle at 50% 50%, #442416 0%, #28140c 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 0, transparent 8px);
+  color: var(--color-chocolate);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ==========================================================================
+   GLOBAL EXPLICIT TYPOGRAPHY RULES & ENFORCEMENT
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6,
+.scrapbook-title,
+.gate-title,
+.letter-heading-scalloped,
+.track-title,
+.ticket-main-title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 700 !important;
+}
+
+.scrapbook-subtitle,
+.gate-subtitle,
+.letter-salutation,
+.letter-body-paragraphs,
+.letter-body-paragraphs p,
+.letter-signature,
+.reason-text,
+.polaroid-caption,
+.badge-quote,
+.torn-text,
+.track-artist,
+.wish-instructions {
+  font-family: 'Caveat', cursive !important;
+}
+
+button,
+.gate-btn,
+.nav-tab-btn,
+.btn-play-pause,
+.nav-action-btn,
+.wax-seal-button,
+.scrapbook-tag-badge,
+.track-badge,
+.reason-num,
+.polaroid-date-stamp,
+.meta-field,
+.stamp-curve-text,
+.wish-celebration-banner {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.meta-field span {
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Accessibility: Focus outlines */
+:focus-visible {
+  outline: 2px solid var(--color-burgundy);
+  outline-offset: 3px;
+}
+
+/* Global Canvas for Heart burst & Confetti */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* ==========================================================================
+   INTERACTIVE GIFT GATE MODAL (Inspired by ref_interactive.jpg)
+   ========================================================================== */
+.gift-gate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 15, 10, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.gift-gate-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gift-gate-card {
+  background: var(--color-cream);
+  border: 4px solid var(--color-white);
+  border-radius: 20px;
+  padding: 40px 30px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 8px rgba(122, 24, 43, 0.15);
+  position: relative;
+  animation: cardFloatIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardFloatIn {
+  from { opacity: 0; transform: scale(0.85) translateY(30px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.gate-mascot-wrapper {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.gate-mascot {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  display: block;
+  animation: gentleBob 2.5s ease-in-out infinite;
+}
+
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.gate-speech-heart {
+  font-size: 1.5rem;
+  color: var(--color-heart-red);
+  position: absolute;
+  top: -10px;
+  left: 55%;
+  animation: pulseHeart 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.gate-title {
+  font-family: var(--font-handwriting);
+  font-size: 3.2rem;
+  color: var(--color-chocolate);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.gate-cursor-dot {
+  display: inline-block;
+  color: var(--color-burgundy);
+  animation: blinkCursor 1s step-end infinite;
+}
+
+@keyframes blinkCursor {
+  50% { opacity: 0; }
+}
+
+.gate-subtitle {
+  font-family: var(--font-casual);
+  font-size: 1.4rem;
+  color: #6a4533;
+  margin-bottom: 30px;
+}
+
+.gate-btn-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 60px;
+}
+
+.gate-btn {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  min-width: 130px;
+  justify-content: center;
+}
+
+.gate-btn-yes {
+  background: var(--color-cream-card);
+  border: 2.5px solid var(--color-burgundy);
+  color: var(--color-burgundy);
+  box-shadow: 0 4px 12px rgba(122, 24, 43, 0.15);
+}
+
+.gate-btn-yes:hover {
+  background: var(--color-burgundy);
+  color: var(--color-white);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(122, 24, 43, 0.3);
+}
+
+.gate-btn-no {
+  background: var(--color-parchment);
+  border: 2px solid #bba390;
+  color: #725647;
+  position: relative;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+/* ==========================================================================
+   SCRAPBOOK TOP VINTAGE SPINE & NAVIGATION TABS
+   ========================================================================== */
+.scrapbook-header {
+  max-width: 1040px;
+  margin: 24px auto 10px;
+  padding: 0 16px;
+  position: sticky;
+  top: 12px;
+  z-index: 900;
+}
+
+.scrapbook-nav-tabs {
+  background: rgba(250, 245, 236, 0.92);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--color-beige);
+  border-radius: 40px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(20, 10, 5, 0.35);
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scrapbook-nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-links-cluster {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-tab-btn {
+  font-family: var(--font-casual);
+  font-size: 1.15rem;
+  background: none;
+  border: none;
+  color: var(--color-chocolate-light);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.nav-tab-btn:hover {
+  background: var(--color-dusty-pink-soft);
+  color: var(--color-burgundy);
+}
+
+.nav-tab-btn.active {
+  background: var(--color-burgundy);
+  color: var(--color-white);
+  font-weight: bold;
+}
+
+.nav-actions-cluster {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-action-btn {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-beige);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--color-burgundy);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.nav-action-btn:hover {
+  background: var(--color-burgundy);
+  color: var(--color-white);
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   SCRAPBOOK MAIN CONTAINER & PAGES
+   ========================================================================== */
+.scrapbook-container {
+  max-width: 1040px;
+  margin: 16px auto;
+  padding: 0 16px;
+  position: relative;
+}
+
+.scrapbook-page {
+  background: var(--color-cream);
+  background-image: 
+    radial-gradient(#ebdccb 0.75px, transparent 0.75px),
+    radial-gradient(#ebdccb 0.75px, var(--color-cream) 0.75px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  border-radius: 24px;
+  border: 8px solid var(--color-cream-card);
+  box-shadow: 
+    0 15px 35px rgba(20, 10, 5, 0.4),
+    inset 0 0 40px rgba(180, 150, 120, 0.15);
+  padding: 50px 40px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: visible;
+}
+
+/* Notebook Perforation or Tape Details */
+.scrapbook-page::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 40px;
+  width: 80px;
+  height: 22px;
+  background: rgba(220, 205, 190, 0.65);
+  border: 1px dashed rgba(160, 130, 100, 0.4);
+  transform: rotate(-2deg);
+  z-index: 5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+}
+
+/* Section Header Style */
+.scrapbook-section-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.scrapbook-tag-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-burgundy);
+  background: var(--color-dusty-pink-soft);
+  border: 1px solid var(--color-dusty-pink);
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.scrapbook-title {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  color: var(--color-chocolate-dark);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.scrapbook-subtitle {
+  font-family: var(--font-handwriting);
+  font-size: 1.6rem;
+  color: var(--color-chocolate-light);
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* Decorative Divider with Stickers */
+.scrapbook-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px auto;
+  max-width: 320px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: repeating-linear-gradient(90deg, #c5b29c 0, #c5b29c 6px, transparent 6px, transparent 12px);
+}
+
+.divider-heart {
+  font-size: 1.3rem;
+  color: var(--color-burgundy);
+}
+
+/* ==========================================================================
+   DIE-CUT STICKER SYSTEM & BASE CLASSES
+   ========================================================================== */
+.diecut-sticker {
+  position: absolute;
+  z-index: 20;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  filter: var(--shadow-sticker);
+  display: inline-block;
+}
+
+.diecut-sticker:hover {
+  transform: scale(1.08) rotate(var(--rot-hover, 3deg)) !important;
+  filter: var(--shadow-sticker-hover);
+  z-index: 50;
+}
+
+.diecut-sticker:active {
+  transform: scale(0.96) !important;
+}
+
+.sticker-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Interactive Touch Area Target */
+.diecut-sticker.interactive {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Tape Strips on Cards & Polaroids */
+.washi-tape-strip {
+  position: absolute;
+  height: 22px;
+  background: rgba(245, 235, 220, 0.85);
+  background-image: repeating-linear-gradient(135deg, rgba(200, 160, 140, 0.25) 0, rgba(200, 160, 140, 0.25) 6px, transparent 6px, transparent 12px);
+  border-left: 2px dashed rgba(160, 120, 90, 0.4);
+  border-right: 2px dashed rgba(160, 120, 90, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* ==========================================================================
+   HERO / COVER SECTION
+   ========================================================================== */
+.hero-cover-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  min-height: 480px;
+}
+
+.cover-lettering {
+  position: relative;
+  z-index: 5;
+}
+
+.cover-polaroid-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.polaroid-stack-main {
+  position: relative;
+  width: 290px;
+}
+
+/* ==========================================================================
+   AUTHENTIC POLAROID PHOTO CARDS
+   ========================================================================== */
+.polaroid-card {
+  background: var(--color-white);
+  padding: 14px 14px 42px 14px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-polaroid);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+  user-select: none;
+}
+
+.polaroid-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 18px 40px rgba(35, 18, 10, 0.25);
+  z-index: 30 !important;
+}
+
+.polaroid-img-frame {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #eee3d5;
+  border-radius: 2px;
+  position: relative;
+}
+
+.polaroid-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+  filter: saturate(1.05) contrast(1.02);
+}
+
+.polaroid-card:hover .polaroid-img-frame img {
+  transform: scale(1.05);
+}
+
+.polaroid-caption {
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  color: var(--color-chocolate);
+  margin-top: 14px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.polaroid-date-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #9a7d6d;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   SECTION 2: POLAROID MEMORIES GRID
+   ========================================================================== */
+.memories-polaroid-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px 30px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.memories-polaroid-grid .polaroid-card:nth-child(1) { transform: rotate(-2.5deg); }
+.memories-polaroid-grid .polaroid-card:nth-child(2) { transform: rotate(2deg); }
+.memories-polaroid-grid .polaroid-card:nth-child(3) { transform: rotate(-1.5deg); }
+.memories-polaroid-grid .polaroid-card:nth-child(4) { transform: rotate(3deg); }
+.memories-polaroid-grid .polaroid-card:nth-child(5) { transform: rotate(-2deg); }
+
+/* Stamp Cutouts attached to Polaroid corners */
+.postage-stamp-badge {
+  position: absolute;
+  width: 52px;
+  height: 60px;
+  background: var(--color-white);
+  padding: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  border: 2px dashed #ab8b76;
+  z-index: 12;
+  transform: rotate(8deg);
+  cursor: pointer;
+}
+
+.stamp-inner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   SECTION 3: VINTAGE KEEPSAKE TICKETS & BADGES
+   ========================================================================== */
+.tickets-collector-pocket {
+  background: var(--color-parchment);
+  border: 3px dashed var(--color-beige-dark);
+  border-radius: 20px;
+  padding: 35px 25px;
+  position: relative;
+  box-shadow: inset 0 2px 10px rgba(40, 20, 10, 0.08);
+}
+
+.tickets-flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 3D Flip Ticket Card: Ticket to Happiness */
+.interactive-ticket-card {
+  perspective: 1000px;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  min-height: 44px;
+  transition: transform 0.3s ease;
+}
+
+.interactive-ticket-card:hover {
+  transform: translateY(-4px) scale(1.03);
+}
+
+.ticket-card-inner {
+  position: relative;
+  width: 280px;
+  height: 120px;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.interactive-ticket-card.is-flipped .ticket-card-inner {
+  transform: rotateY(180deg);
+}
+
+.ticket-face {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(45, 20, 10, 0.2);
+  filter: var(--shadow-sticker);
+}
+
+.ticket-back {
+  transform: rotateY(180deg);
+}
+
+.dusty-pink-ticket {
+  background: var(--color-dusty-pink-soft);
+  border: 3px solid var(--color-white);
+}
+
+.ticket-diecut-border {
+  height: 100%;
+  padding: 8px 16px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Notch Cutouts */
+.ticket-notch {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: var(--color-cream);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 2px solid var(--color-white);
+  z-index: 5;
+}
+
+.left-notch { left: -10px; }
+.right-notch { right: -10px; }
+
+.ticket-inner-dashed {
+  border: 1.5px dashed #c0877f;
+  height: 100%;
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ticket-subtext {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-burgundy);
+  letter-spacing: 1px;
+}
+
+.ticket-main-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-burgundy-dark);
+  letter-spacing: 0.5px;
+  margin: 3px 0;
+}
+
+.ticket-footer-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #7b4f48;
+}
+
+.tap-hint {
+  color: var(--color-burgundy);
+  font-weight: bold;
+}
+
+.secret-revealed {
+  border-color: var(--color-burgundy);
+  background: #fbf0ee;
+}
+
+.secret-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--color-burgundy);
+}
+
+.secret-msg {
+  font-family: var(--font-handwriting);
+  font-size: 1.15rem;
+  color: var(--color-chocolate-dark);
+  line-height: 1.25;
+  margin: 4px 0;
+}
+
+.flip-again {
+  font-size: 0.7rem;
+  color: #905d54;
+}
+
+/* Cream Ticket To Anywhere */
+.ticket-anywhere-style {
+  width: 270px;
+  height: 115px;
+}
+
+.cream-ticket-border {
+  background: #fff8ee;
+  border: 3px solid var(--color-white);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(45, 20, 10, 0.18);
+}
+
+.cream-ticket-border .ticket-inner-dashed {
+  border-color: #d1b89d;
+}
+
+.ticket-row-split {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ticket-tiny-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #8c6a53;
+}
+
+.ticket-bold-heading {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-chocolate);
+}
+
+.ticket-motto {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-burgundy);
+  letter-spacing: 0.5px;
+}
+
+.ticket-barcode-box {
+  border-left: 1.5px dashed #d1b89d;
+  padding-left: 10px;
+  text-align: center;
+}
+
+.serial-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #55331f;
+}
+
+.mini-barcode {
+  width: 45px;
+  height: 22px;
+  background: repeating-linear-gradient(90deg, #332218 0, #332218 2px, transparent 2px, transparent 4px, #332218 4px, #332218 7px);
+  margin-top: 4px;
+}
+
+/* Memories Plate Ticket */
+.ticket-memories-style {
+  width: 250px;
+  height: 110px;
+}
+
+.vintage-plate-border {
+  background: #f4ecdc;
+  border: 3px solid var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(45, 20, 10, 0.2);
+}
+
+.vintage-plate-border .ticket-inner-dashed {
+  border-color: #ba384c;
+}
+
+.plate-top-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-burgundy);
+  font-weight: bold;
+}
+
+.plate-main-text {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--color-burgundy);
+  line-height: 1.1;
+}
+
+.plate-bottom-text {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #442211;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Oval Pill Badge: "You're perfect." */
+.diecut-white-pill {
+  display: inline-block;
+  background: var(--color-white);
+  padding: 4px;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(40, 15, 15, 0.2);
+  cursor: pointer;
+}
+
+.badge-inner-pill {
+  background: #fbebee;
+  border: 2px solid var(--color-burgundy);
+  padding: 6px 18px;
+  border-radius: 24px;
+}
+
+.badge-quote {
+  font-family: var(--font-handwriting);
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--color-burgundy);
+  white-space: nowrap;
+}
+
+/* Torn Paper Note: "your friendship means the world to me." */
+.torn-paper-note-sticker {
+  position: relative;
+  background: #fbf5e7;
+  padding: 16px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(40, 20, 10, 0.15);
+  border-left: 3px solid #dac2a6;
+  max-width: 260px;
+  transform: rotate(-1.5deg);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.torn-paper-note-sticker:hover {
+  transform: rotate(1deg) scale(1.04);
+}
+
+.torn-paper-note-sticker .top-tape {
+  top: -10px;
+  left: 30%;
+  width: 70px;
+}
+
+.torn-text {
+  font-family: var(--font-handwriting);
+  font-size: 1.55rem;
+  color: #3b2014;
+  line-height: 1.2;
+}
+
+.tiny-scribble-heart {
+  display: block;
+  text-align: right;
+  color: var(--color-burgundy);
+  font-size: 1.2rem;
+}
+
+/* Band-Aid Sticker */
+.bandaid-outer-cutout {
+  width: 140px;
+  height: 48px;
+  background: #f0decb;
+  border: 3px solid var(--color-white);
+  border-radius: 24px;
+  box-shadow: 0 4px 10px rgba(40, 20, 10, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.bandaid-pad {
+  width: 52px;
+  height: 38px;
+  background: #faede0;
+  border: 1px dashed #cbb199;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bandaid-heart {
+  color: var(--color-burgundy);
+  font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   SECTION 4: SOUNDTRACK PLAYER (SPOTIFY AESTHETIC CASSETTE CARD)
+   ========================================================================== */
+.soundtrack-card {
+  background: var(--color-cream-card);
+  border: 4px solid var(--color-white);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: var(--shadow-paper);
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 30px;
+  align-items: center;
+  position: relative;
+}
+
+.album-art-diecut {
+  position: relative;
+  width: 160px;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(40, 20, 10, 0.25);
+  border: 3px solid var(--color-white);
+}
+
+.album-art-diecut img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.album-play-overlay-btn {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 15, 10, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: var(--color-white);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+
+.album-art-diecut:hover .album-play-overlay-btn {
+  opacity: 1;
+}
+
+.track-info-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.track-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-burgundy);
+  background: var(--color-dusty-pink-soft);
+  padding: 3px 10px;
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.track-title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--color-chocolate-dark);
+  line-height: 1.2;
+}
+
+.track-artist {
+  font-family: var(--font-handwriting);
+  font-size: 1.4rem;
+  color: var(--color-chocolate-light);
+}
+
+/* Audio Waveform Equalizer Display */
+.waveform-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  margin: 10px 0;
+}
+
+.wave-bar {
+  width: 4px;
+  height: 10px;
+  background: var(--color-dusty-pink);
+  border-radius: 3px;
+  transition: height 0.15s ease;
+}
+
+.soundtrack-card.is-playing .wave-bar {
+  animation: equalize 1s ease-in-out infinite alternate;
+  background: var(--color-burgundy);
+}
+
+.soundtrack-card.is-playing .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(3) { animation-delay: 0.25s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(4) { animation-delay: 0.15s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(5) { animation-delay: 0.35s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(6) { animation-delay: 0.05s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(7) { animation-delay: 0.2s; }
+.soundtrack-card.is-playing .wave-bar:nth-child(8) { animation-delay: 0.3s; }
+
+@keyframes equalize {
+  0% { height: 6px; }
+  100% { height: 32px; }
+}
+
+.audio-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.btn-play-pause {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-burgundy);
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(122, 24, 43, 0.3);
+  transition: var(--transition-smooth);
+}
+
+.btn-play-pause:hover {
+  transform: scale(1.08);
+  background: var(--color-burgundy-light);
+}
+
+.volume-slider-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--color-chocolate-light);
+}
+
+.volume-slider-box input[type="range"] {
+  accent-color: var(--color-burgundy);
+  cursor: pointer;
+  width: 80px;
+}
+
+/* ==========================================================================
+   SECTION 5: THE SCALLOPED LOVE/FRIENDSHIP LETTER (From ref_loveletter.jpg)
+   ========================================================================== */
+.letter-stage-wrapper {
+  background: var(--color-burgundy);
+  border-radius: 20px;
+  padding: 40px 20px;
+  box-shadow: 0 15px 35px rgba(25, 10, 10, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-interactive-box {
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Scalloped Letter Paper */
+.scalloped-letter-sheet {
+  background: var(--color-cream);
+  border-radius: 12px;
+  padding: 45px 35px 35px 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  position: relative;
+  border: 1px solid #ebd9c5;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Scalloped Stamp Edge CSS mask/trick */
+  background-image: 
+    radial-gradient(circle at 10px 10px, transparent 6px, var(--color-cream) 7px);
+}
+
+.letter-heading-scalloped {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  color: var(--color-burgundy-dark);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.letter-meta-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-burgundy);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.meta-field {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--color-chocolate);
+}
+
+.meta-field span {
+  font-family: var(--font-handwriting);
+  font-size: 1.8rem;
+  color: var(--color-burgundy);
+  margin-left: 8px;
+}
+
+.stamps-corner-cluster {
+  display: flex;
+  gap: 8px;
+}
+
+.scallop-photo-stamp {
+  width: 58px;
+  height: 68px;
+  background: var(--color-white);
+  padding: 4px;
+  border: 1px dashed #bba08d;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  transform: rotate(3deg);
+}
+
+.scallop-photo-stamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.letter-salutation {
+  font-family: var(--font-handwriting);
+  font-size: 2.3rem;
+  color: var(--color-burgundy);
+  margin-bottom: 16px;
+}
+
+.letter-body-paragraphs {
+  font-family: var(--font-handwriting);
+  font-size: 1.55rem;
+  line-height: 1.55;
+  color: var(--color-chocolate);
+  margin-bottom: 24px;
+}
+
+.letter-signature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.letter-signature {
+  font-family: var(--font-handwriting);
+  font-size: 1.8rem;
+  color: var(--color-burgundy);
+}
+
+.made-with-love-stamp {
+  width: 72px;
+  height: 72px;
+  border: 2.5px dashed var(--color-burgundy);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-12deg);
+  opacity: 0.85;
+}
+
+.stamp-curve-text {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--color-burgundy);
+}
+
+.stamp-heart-icon {
+  color: var(--color-burgundy);
+  font-size: 1.1rem;
+}
+
+/* Wax Seal on Envelope */
+.wax-seal-button {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 35% 35%, #b22234, #6f111f);
+  border-radius: 50%;
+  box-shadow: 0 6px 14px rgba(40, 10, 10, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border: 2px solid #570b16;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.4rem;
+  z-index: 25;
+  transition: transform 0.25s ease;
+}
+
+.wax-seal-button:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+/* ==========================================================================
+   SECTION 6: REASONS WHY YOU MEAN THE WORLD TO ME (FOLD-OUT STICKY NOTES)
+   ========================================================================== */
+.reasons-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.sticky-reason-card {
+  background: #fff8e8;
+  padding: 24px 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(40, 20, 10, 0.1);
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.sticky-reason-card:nth-child(1) { background: #fdf6ec; transform: rotate(-1.5deg); }
+.sticky-reason-card:nth-child(2) { background: #faede9; transform: rotate(2deg); }
+.sticky-reason-card:nth-child(3) { background: #f4f6e8; transform: rotate(-2deg); }
+.sticky-reason-card:nth-child(4) { background: #fceede; transform: rotate(1.5deg); }
+.sticky-reason-card:nth-child(5) { background: #f6ecf4; transform: rotate(-1deg); }
+.sticky-reason-card:nth-child(6) { background: #f8f2eb; transform: rotate(2.5deg); }
+
+.sticky-reason-card:hover {
+  transform: scale(1.05) translateY(-5px) !important;
+  box-shadow: 0 12px 24px rgba(40, 20, 10, 0.18);
+  z-index: 10;
+}
+
+.reason-num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--color-burgundy);
+  margin-bottom: 6px;
+}
+
+.reason-text {
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: var(--color-chocolate);
+}
+
+/* ==========================================================================
+   SECTION 7: BIRTHDAY WISH & BLOW THE CANDLE CEREMONY
+   ========================================================================== */
+.cake-ceremony-wrapper {
+  background: var(--color-parchment);
+  border: 4px dashed var(--color-beige-dark);
+  border-radius: 24px;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.cupcake-illustration-box {
+  width: 140px;
+  height: 170px;
+  margin: 0 auto 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.candle-flame {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 28px;
+  background: radial-gradient(ellipse at 50% 80%, #fff7b2 20%, #f59e0b 60%, #ef4444 95%);
+  border-radius: 50% 50% 35% 35%;
+  box-shadow: 0 0 20px #f59e0b, 0 0 40px #f59e0b;
+  animation: flicker 0.15s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+  cursor: pointer;
+}
+
+@keyframes flicker {
+  0% { transform: translateX(-50%) rotate(-2deg) scale(1); }
+  100% { transform: translateX(-50%) rotate(2deg) scale(1.08); }
+}
+
+.candle-flame.extinguished {
+  display: none;
+}
+
+.candle-smoke {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 6px;
+  height: 25px;
+  background: rgba(180, 180, 180, 0.6);
+  filter: blur(3px);
+  border-radius: 10px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.candle-flame.extinguished + .candle-smoke {
+  animation: smokeRise 1.8s ease-out forwards;
+}
+
+@keyframes smokeRise {
+  0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-30%, -40px) scale(3); }
+}
+
+.candle-stick {
+  position: absolute;
+  top: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 40px;
+  background: repeating-linear-gradient(45deg, #fce7f3 0, #fce7f3 6px, #db2777 6px, #db2777 12px);
+  border-radius: 3px;
+}
+
+.cake-frosting {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 45px;
+  background: var(--color-dusty-pink-soft);
+  border: 3px solid var(--color-white);
+  border-radius: 30px 30px 10px 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.cake-base {
+  position: absolute;
+  top: 112px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 48px;
+  background: #a1704e;
+  border-radius: 0 0 16px 16px;
+  border: 3px solid var(--color-white);
+}
+
+.wish-instructions {
+  font-family: var(--font-casual);
+  font-size: 1.45rem;
+  color: var(--color-chocolate);
+  margin-bottom: 12px;
+}
+
+.wish-celebration-banner {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--color-burgundy);
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-top: 10px;
+}
+
+.wish-celebration-banner.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   INTERACTIVE STICKER DRAWER / FLOATING TOOLBOX
+   ========================================================================== */
+.sticker-drawer-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--color-cream-card);
+  border: 3px solid var(--color-burgundy);
+  border-radius: 30px;
+  padding: 10px 18px;
+  box-shadow: 0 8px 24px rgba(35, 18, 10, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+  font-family: var(--font-casual);
+  font-size: 1.25rem;
+  color: var(--color-burgundy);
+  font-weight: bold;
+  transition: var(--transition-spring);
+  min-height: 48px;
+}
+
+.sticker-drawer-toggle:hover {
+  transform: scale(1.08) translateY(-3px);
+  background: var(--color-burgundy);
+  color: var(--color-white);
+}
+
+.sticker-drawer-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-cream);
+  border-top: 4px solid var(--color-beige);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 24px 30px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+  z-index: 1001;
+  transform: translateY(105%);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.sticker-drawer-panel.open {
+  transform: translateY(0);
+}
+
+.drawer-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.drawer-title {
+  font-family: var(--font-handwriting);
+  font-size: 1.8rem;
+  color: var(--color-chocolate-dark);
+}
+
+.drawer-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--color-chocolate-light);
+  padding: 4px 10px;
+}
+
+.sticker-tray-grid {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.tray-sticker-item {
+  width: 65px;
+  height: 65px;
+  background: var(--color-white);
+  border: 2px dashed var(--color-beige);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: var(--transition-smooth);
+  padding: 4px;
+}
+
+.tray-sticker-item:hover {
+  transform: scale(1.15) rotate(4deg);
+  border-color: var(--color-burgundy);
+}
+
+/* Placed Stickers on the Scrapbook Page */
+.placed-custom-sticker {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  z-index: 60;
+  cursor: grab;
+  filter: var(--shadow-sticker);
+  animation: placePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  touch-action: none;
+}
+
+@keyframes placePop {
+  0% { transform: scale(0.2); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   POPUP TOAST FOR INTERACTIVE STICKERS
+   ========================================================================== */
+.sticker-speech-toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-cream-card);
+  border: 3px solid var(--color-burgundy);
+  border-radius: 20px;
+  padding: 12px 24px;
+  box-shadow: 0 10px 30px rgba(30, 15, 10, 0.35);
+  font-family: var(--font-handwriting);
+  font-size: 1.7rem;
+  color: var(--color-chocolate-dark);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+  max-width: 90vw;
+}
+
+.sticker-speech-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   PHOTO LIGHTBOX POPUP
+   ========================================================================== */
+.scrapbook-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 12, 8, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10005;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.scrapbook-lightbox.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.lightbox-content-box {
+  max-width: 580px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.lightbox-polaroid {
+  background: var(--color-white);
+  padding: 16px 16px 45px 16px;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  transform: rotate(-1deg);
+}
+
+.lightbox-polaroid img {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  border-radius: 3px;
+}
+
+.lightbox-caption {
+  font-family: var(--font-handwriting);
+  font-size: 2rem;
+  color: var(--color-chocolate);
+  margin-top: 16px;
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 2.2rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MOBILE: 320px, 360px, 375px, 390px, 412px, 430px & TABLET)
+   ========================================================================== */
+
+/* Universal mobile-safe container rules */
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  .scrapbook-container {
+    padding: 0 12px;
+    overflow-x: clip;
+  }
+
+  .scrapbook-page {
+    padding: 32px 18px;
+    margin-bottom: 24px;
+    border-width: 5px;
+    overflow-x: clip;
+  }
+
+  .hero-cover-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .cover-polaroid-stage {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  .soundtrack-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 24px 16px;
+    gap: 20px;
+    justify-items: center;
+  }
+
+  .album-art-diecut {
+    margin: 0 auto;
+    width: 150px;
+  }
+
+  .audio-controls-row {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .scalloped-letter-sheet {
+    padding: 28px 18px;
+  }
+
+  .letter-stage-wrapper {
+    padding: 28px 12px 36px 12px;
+  }
+
+  .reasons-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Common Mobile Phones (<= 480px, including 430px, 412px, 390px, 375px, 360px, 320px) */
+@media (max-width: 480px) {
+  body {
+    padding-bottom: 85px;
+  }
+
+  /* Ribbon Navigation */
+  .scrapbook-header {
+    top: 6px;
+    padding: 0 6px;
+    margin: 8px auto 6px;
+  }
+
+  .scrapbook-nav-tabs {
+    padding: 6px 8px;
+    gap: 4px;
+    border-radius: 28px;
+  }
+
+  .nav-tab-btn {
+    font-size: 0.95rem !important;
+    padding: 4px 10px;
+    min-height: 38px;
+  }
+
+  .nav-action-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  /* Scrapbook Pages */
+  .scrapbook-page {
+    padding: 24px 12px;
+    border-radius: 18px;
+    border-width: 4px;
+    margin-bottom: 20px;
+    overflow-x: clip;
+  }
+
+  .scrapbook-page::before {
+    display: none; /* Hide overflow tape stub on mobile */
+  }
+
+  .washi-tape-strip {
+    height: 18px;
+    opacity: 0.85;
+  }
+
+  /* Headings & Subheadings with Fluid Clamp */
+  .scrapbook-title {
+    font-size: clamp(1.6rem, 5.5vw, 2.1rem) !important;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  .scrapbook-subtitle {
+    font-size: clamp(1.15rem, 4vw, 1.45rem) !important;
+    line-height: 1.35;
+  }
+
+  .scrapbook-tag-badge {
+    font-size: 0.75rem !important;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+  }
+
+  /* Gift Gate Modal */
+  .gift-gate-card {
+    padding: 28px 16px;
+    border-radius: 18px;
+    margin: 10px;
+  }
+
+  .gate-title {
+    font-size: clamp(2rem, 7vw, 2.6rem) !important;
+  }
+
+  .gate-subtitle {
+    font-size: clamp(1.1rem, 3.8vw, 1.35rem) !important;
+    margin-bottom: 22px;
+  }
+
+  .gate-btn-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .gate-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9rem !important;
+  }
+
+  /* Polaroid Stage */
+  .cover-polaroid-stage {
+    max-width: 250px;
+  }
+
+  .polaroid-card {
+    padding: 10px 10px 16px 10px;
+    border-radius: 8px;
+  }
+
+  .polaroid-caption {
+    font-size: 1.25rem !important;
+    margin-top: 10px;
+  }
+
+  /* Soundtrack Card */
+  .soundtrack-card {
+    padding: 18px 12px;
+    border-radius: 18px;
+    border-width: 3px;
+  }
+
+  .album-art-diecut {
+    width: 130px;
+    border-radius: 10px;
+  }
+
+  .track-title {
+    font-size: 1.45rem !important;
+  }
+
+  .track-artist {
+    font-size: 1.2rem !important;
+  }
+
+  .audio-controls-row {
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .volume-slider-box {
+    font-size: 0.85rem;
+  }
+
+  .volume-slider-box input[type="range"] {
+    width: 75px;
+  }
+
+  /* Letter Stage */
+  .letter-stage-wrapper {
+    padding: 20px 8px 30px 8px;
+    border-radius: 14px;
+  }
+
+  .scalloped-letter-sheet {
+    padding: 20px 12px 26px 12px;
+    border-radius: 8px;
+  }
+
+  .letter-heading-scalloped {
+    font-size: 1.4rem !important;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .letter-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .meta-field {
+    font-size: 1rem !important;
+  }
+
+  .meta-field span {
+    font-size: 1.5rem !important;
+  }
+
+  .stamps-corner-cluster {
+    align-self: flex-end;
+  }
+
+  .scallop-photo-stamp {
+    width: 44px;
+    height: 54px;
+    padding: 2px;
+  }
+
+  .letter-salutation {
+    font-size: 1.7rem !important;
+    margin-bottom: 12px;
+  }
+
+  .letter-body-paragraphs p {
+    font-size: 1.3rem !important;
+    line-height: 1.45;
+  }
+
+  .letter-signature-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .letter-signature {
+    font-size: 1.5rem !important;
+  }
+
+  .made-with-love-stamp {
+    width: 58px;
+    height: 58px;
+    align-self: flex-end;
+  }
+
+  .wax-seal-button {
+    width: 50px;
+    height: 50px;
+    bottom: -18px;
+    font-size: 1.2rem;
+  }
+
+  /* Reasons Cards Grid */
+  .reasons-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .sticky-reason-card {
+    padding: 16px 14px;
+  }
+
+  .reason-text {
+    font-size: 1.35rem !important;
+  }
+
+  /* Birthday Wish & Cupcake */
+  .cake-ceremony-wrapper {
+    padding: 24px 12px;
+    border-radius: 16px;
+  }
+
+  .wish-celebration-banner {
+    font-size: 1rem !important;
+    padding: 12px 14px;
+  }
+
+  /* Mobile-Safe Stickers Repositioning (No overflow outside viewport) */
+  .diecut-sticker {
+    max-width: 75px !important;
+  }
+
+  #sticker-stick-friends-hero {
+    top: -15px !important;
+    left: 4px !important;
+    width: 65px !important;
+  }
+
+  #sticker-teddy-hero {
+    bottom: -10px !important;
+    right: 4px !important;
+    width: 60px !important;
+  }
+
+  #sticker-top-bow {
+    top: 10px !important;
+    left: 8px !important;
+    width: 50px !important;
+  }
+
+  #sticker-corner-butterfly {
+    top: 10px !important;
+    right: 8px !important;
+    width: 42px !important;
+  }
+
+  #holder-ticket-happiness-song {
+    top: -10px !important;
+    left: 8px !important;
+    transform: scale(0.8) !important;
+    transform-origin: left top !important;
+    max-width: 180px !important;
+  }
+
+  #holder-ticket-anywhere-letter {
+    top: -10px !important;
+    right: 8px !important;
+    transform: scale(0.8) !important;
+    transform-origin: right top !important;
+    max-width: 180px !important;
+  }
+
+  #sticker-spotify-disc {
+    top: -10px !important;
+    right: 10px !important;
+    width: 42px !important;
+  }
+
+  #sticker-mygirl-song {
+    bottom: -12px !important;
+    right: 10px !important;
+    width: 55px !important;
+  }
+
+  .ticket-card-inner {
+    width: 220px !important;
+    height: 100px !important;
+  }
+
+  .ticket-anywhere-style {
+    width: 220px !important;
+  }
+}
+
+/* Extra Small Phones (<= 360px, such as 320px and 360px) */
+@media (max-width: 360px) {
+  html {
+    font-size: 14px;
+  }
+
+  .scrapbook-container {
+    padding: 0 6px;
+  }
+
+  .scrapbook-page {
+    padding: 20px 8px;
+    border-width: 3px;
+    border-radius: 14px;
+  }
+
+  .scrapbook-title {
+    font-size: 1.55rem !important;
+  }
+
+  .scrapbook-subtitle {
+    font-size: 1.15rem !important;
+  }
+
+  .cover-polaroid-stage {
+    max-width: 220px;
+  }
+
+  .soundtrack-card {
+    padding: 14px 8px;
+  }
+
+  .album-art-diecut {
+    width: 110px;
+  }
+
+  .btn-play-pause {
+    width: 44px;
+    height: 44px;
+  }
+
+  .letter-salutation {
+    font-size: 1.5rem !important;
+  }
+
+  .letter-body-paragraphs p {
+    font-size: 1.2rem !important;
+  }
+
+  .letter-signature {
+    font-size: 1.35rem !important;
+  }
+
+  .reason-text {
+    font-size: 1.25rem !important;
+  }
+
+  .diecut-sticker {
+    max-width: 55px !important;
+  }
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .diecut-sticker:hover {
+    transform: none !important;
+  }
+}
